@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Gestion 360</title>
+  </head>
+  <body class="bg-gray-100">
+    <div class="container text-center sm:text-left sm:mx-auto my-10 ">
+
+      <header class="my-5">
+        <h1 class="font-bold text-4xl text-gray-800 sm:flex flex-none ">
+          <span class="iconify mt-1" data-icon="mdi:chart-bell-curve"></span>
+          Gestión 360
+        </h1>
+        <h3 class="text-xl text-gray-800">
+          Sistema de monitoreo
+        </h3>
+      </header>
+
+      <div class="bg-white rounded-lg border shadow-md shadow-2xl p-5 my-5">
+        <h2 class="text-2xl font-bold text-blue-600 my-3 flex justify-center">
+          Humedad
+          <span class="iconify mt-1" data-icon="mdi:water"></span>
+        </h2>
+        <canvas id="humidity_chart" height="100"></canvas>
+      </div>
+  
+      <div class="bg-white rounded-lg border shadow-md shadow-2xl p-5 my-5">
+        <h2 class="text-2xl font-bold text-indigo-800 my-2 flex justify-center">
+          Temperatura
+          <span class="iconify mt-1" data-icon="mdi:temperature-celsius"></span>
+        </h2>
+        <canvas id="temperature_c_chart" height="100"></canvas>
+      </div>
+
+      <div class="bg-white rounded-lg border shadow-md shadow-2xl p-5 my-5">
+        <h2 class="text-2xl font-bold text-emerald-600 my-2 flex justify-center">
+          Temperatura
+          <span class="iconify mt-1" data-icon="mdi:temperature-fahrenheit"></span>
+        </h2>
+        <canvas id="temperature_f_chart" height="100"></canvas>
+      </div>
+
+      <div class="text-white bg-neutral-800 rounded-lg border shadow-md shadow-2xl p-5 my-5">
+        <h2 class="text-2xl font-bold my-3 flex justify-center items-center">
+          Monitoreo
+          <span class="iconify mt-1 ml-2" data-icon="mdi:format-list-bulleted"></span>
+        </h2>
+        <table id="data-table" class="shadow-lg bg-neutral-800 border-collapse w-full mt-5">
+          <tr>
+            <th class="bg-neutral-700 border text-center px-8 py-4">
+              Humedad
+            </th>
+            <th class="bg-neutral-700 border text-center px-8 py-4">
+              Temp. °C
+            </th>
+            <th class="bg-neutral-700 border text-center px-8 py-4">
+              Temp. °F
+            </th>
+            <th class="bg-neutral-700 border text-center px-8 py-4">
+              Fecha
+            </th>
+          </tr>
+        </table>
+      </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.iconify.design/2/2.2.0/iconify.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/table.js"></script>
+    <script src="js/index.js"></script>
+  </body>
+</html>
