@@ -20,20 +20,36 @@ app.use(express.static(path.join(__dirname, 'public')));
 io.on('connection',  async (socket) => {
 
   const db = await getConnection()
+  const collectionsToSend = [
+    {
+      collectionName: 'sensor_data',
+      socketEvent: 'sensor_data',
+      limit: 20
+    },
+    {
+      collectionName: 'sensor_ultrasonic',
+      socketEvent: 'sensor_ultrasonic_data',
+      limit: 1
+    }
+  ]
 
-  const sendData = async (collectionName, socketEvent) => {
+  const sendData = async (collectionName, socketEvent, limit) => {
     const collection = db.collection(collectionName);
-    const data = await collection.find().toArray();
+    const data = await collection.find().sort({ _id: -1 }).limit(limit).toArray();
     socket.emit(socketEvent, data)
   }
 
+  const sendAllData = () => {
+    collectionsToSend.forEach(collection => {
+      sendData(collection.collectionName, collection.socketEvent, collection.limit)
+    })
+  }
+
   // send data to client socket, then every two seconds send again
-  sendData('sensor_data', 'sensor_data')
-  sendData('sensor_ultrasonic', 'sensor_ultrasonic_data')
+  sendAllData()
 
   setInterval(() => { 
-    sendData('sensor_data', 'sensor_data')
-    sendData('sensor_ultrasonic', 'sensor_ultrasonic_data')
+    sendAllData()
   }, 2000);
 
 });

@@ -124,7 +124,7 @@ const updateChart = (chart, labels, data) => {
   
 // update every line chart
 const updateLineCharts = (data) => {
-    const dates = data.map(data => { return data.date });
+    const dates = data.map(data => { return moment(data.date).format('HH:mm:ss') });
     lineCharts.forEach(chart => {
         const messure = data.map(data => { return data[chart.dataProp] });
         updateChart(chart.instance, dates, messure)
@@ -133,6 +133,12 @@ const updateLineCharts = (data) => {
 
 // update doughnut chart 
 const updateDoughnutChart = (data) => {
-    const dataChart = [100 - data.percent, data.percent]
+    let dataChart = [100 - data.percent, data.percent]
+    if (data.percent > 100) {
+        dataChart = [0, 100];
+    }
+    if (data.percent < 0) {
+        dataChart = [100, 0];
+    }
     updateChart(doughnutChart.instance, doughnutChart.data.labels, dataChart)
 }
