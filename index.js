@@ -20,17 +20,21 @@ app.use(express.static(path.join(__dirname, 'public')));
 io.on('connection',  async (socket) => {
 
   const db = await getConnection()
-  const sensorData = db.collection('sensor_data'); 
 
-  const sendSensorData = async () => {
-    let data = await sensorData.find().toArray();
-    socket.emit('sensor_data', data)
+  const sendData = async (collectionName, socketEvent) => {
+    const collection = db.collection(collectionName);
+    const data = await collection.find().toArray();
+    socket.emit(socketEvent, data)
   }
 
-  sendSensorData()
+  // send data to client socket, then every two seconds send again
+  sendData('sensor_data', 'sensor_data')
+  sendData('sensor_ultrasonic', 'sensor_ultrasonic_data')
 
-  // send sensor data to client socket every two seconds 
-  setInterval(() => { sendSensorData() }, 2000);
+  setInterval(() => { 
+    sendData('sensor_data', 'sensor_data')
+    sendData('sensor_ultrasonic', 'sensor_ultrasonic_data')
+  }, 2000);
 
 });
 

@@ -7,10 +7,10 @@ const baseOptions = {
     layout: {
         padding: 10
     },
-    animation: true
+    animation: false,
 }
 
-const charts = [
+const lineCharts = [
     // Humidity chart
     {
         elementID: 'humidity_chart',
@@ -57,10 +57,44 @@ const charts = [
         options: baseOptions
     },
 ]
+
+const doughnutChart = {
+    elementID: 'fuil_chart',
+    instance: null,
+    type: 'doughnut',
+    data: {
+        labels: [
+          'Volumen restante',
+          'Volumen combustible',
+        ],
+        datasets: [{
+          label: 'Volumen Combustible',
+          data: [0,0],
+          backgroundColor: [
+            '#c9c9c9',
+            '#d49802',
+          ],
+          hoverOffset: 4
+        }]
+    },
+    options: {
+        animation: false,
+        scales: {
+            xAxes: [{
+                display: false
+            }],
+            yAxes: [{
+                display: false
+            }],
+        },
+    }
+}
   
 // render all charts
 const renderCharts = () => {
-    charts.forEach(chart => {
+
+    // render line charts
+    lineCharts.forEach(chart => {
         const chartInit= new Chart(
             document.getElementById(chart.elementID), 
             { 
@@ -74,6 +108,9 @@ const renderCharts = () => {
         );
         chart.instance = chartInit
     });
+    
+    // render doughnut chart
+    doughnutChart.instance = new Chart(document.getElementById(doughnutChart.elementID), doughnutChart);
 }
     
 // update an individual chart
@@ -85,11 +122,17 @@ const updateChart = (chart, labels, data) => {
     chart.update();
 }
   
-// update every chart
-const updateCharts = (data) => {
+// update every line chart
+const updateLineCharts = (data) => {
     const dates = data.map(data => { return data.date });
-    charts.forEach(chart => {
+    lineCharts.forEach(chart => {
         const messure = data.map(data => { return data[chart.dataProp] });
         updateChart(chart.instance, dates, messure)
     })
+}
+
+// update doughnut chart 
+const updateDoughnutChart = (data) => {
+    const dataChart = [100 - data.percent, data.percent]
+    updateChart(doughnutChart.instance, doughnutChart.data.labels, dataChart)
 }
